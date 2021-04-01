@@ -7,6 +7,7 @@ from sqlalchemy import func
 import sqlite3
 
 app = Flask(__name__)
+app.cinfig['SERVER_NAME'] = 'https://the-gpa-calculator-noay.herokuapp.com/'
 app.secret_key = 'Secret Key'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///sql/Course.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
