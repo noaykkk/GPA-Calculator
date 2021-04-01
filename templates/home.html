@@ -1,0 +1,132 @@
+{% extends 'base.html' %}
+
+{% block title %}
+University GPA Calculator
+{% endblock %}
+
+{% block body %}
+    <div class="hello-image">
+          <div class="hello-text">
+              <h1 style="font-size:100px">Major GPA Calculator</h1>
+          </div>
+    </div>
+
+    <!--table-->
+    <div class="card">
+        <h2 class="card-header"></h2>
+        <div class="card-body">
+            <table class="table table-hover table-bordered table-striped table-condensed">
+                <thead class="thead-light">
+                <tr>
+                    <th scope="col"></th>
+                    <th scope="col">Course</th>
+                    <th scope="col">Credit Hours</th>
+                    <th scope="col">Grade</th>
+                    <th scope="col">Quality Points</th>
+                    <th scope="col"></th>
+                </tr>
+                </thead>
+                <tbody>
+                {% set count = namespace(value=1) %}
+                {%  for row in Course %}
+                <tr>
+                    <th scope="row">Course{{ count.value }}</th>
+                    {% set count.value = count.value + 1 %}
+                    <td>{{ row.course_id }}</td>
+                    <td>{{ row.credit_hours }}</td>
+                    <td>{{ row.grade }}</td>
+                    <td>{{ row.quality_points }}</td>
+                    <td>
+                        <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#update{{ row.id }}">Edit</button>
+                        <a href="/delete/{{ row.id }}" type="button" class="btn btn-danger">Delete</a>
+                    </td>
+                </tr>
+                <!-- Modal:update-->
+                <div class="modal fade" id="update{{ row.id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+                  <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h5 class="modal-title" id="exampleModalLabel">Update Course</h5>
+                      </div>
+                      <div class="modal-body">
+                        <form action="{{ url_for('update')}}" method="POST">
+                            <input type="hidden" name="id" value="{{ row.id }}">
+                          <div class="form-group">
+                            <label for="course_id_update" class="control-label">Course Subject:</label>
+                            <input type="text" class="form-control" name="course_id_update" id="course_id_update" value="{{ row.course_id }}">
+                          </div>
+                          <div class="form-group">
+                            <label for="credit_hours_update" class="control-label">Credit Hour:</label>
+                            <input type="text" class="form-control" name="credit_hours_update" id="credit_hours_update" value="{{ row.credit_hours }}">
+                          </div>
+                          <div class="form-group">
+                            <label for="grade_update" class="control-label">Grade:</label>
+                            <input type="text" class="form-control" name="grade_update" id="grade_update" value="{{ row.grade }}">
+                          </div>
+                          <div class="modal-footer">
+                              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                              <button type="submit" class="btn btn-primary">Update</button>
+                          </div>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                {% endfor %}
+
+                </tbody>
+            </table>
+            <button type="button" class="btn btn-outline-info" data-toggle="modal" data-target="#addNew">ADD NEW CLASS</button>
+        </div>
+    </div>
+
+    {% block content %}
+        {% if GPA == -1 %}
+        {% else %}
+            <div class="card">
+            <h4 class="card-header">Your Cumulative Grade Point Average</h4>
+                <div class="col-sm-12 gpa-types">
+                    <ul class="gpa">
+                        <li>
+                            <div class="col-xs-6">{{ GPA }} out of 4.00</div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        {% endif %}
+    {% endblock %}
+
+    <!--modal: Add New Class-->
+    <div class="modal fade" id="addNew" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h5 class="modal-title" id="exampleModalLabel">Course Information</h5>
+          </div>
+          <div class="modal-body">
+            <form action="{{ url_for('insert')}}" method="POST">
+              <div class="form-group">
+                <label for="course_id" class="control-label">Course Subject:</label>
+                <input type="text" class="form-control" name="course_id" id="course_id">
+              </div>
+              <div class="form-group">
+                <label for="credit_hours" class="control-label">Credit Hour:</label>
+                <input type="text" class="form-control" name="credit_hours" id="credit_hours">
+              </div>
+              <div class="form-group">
+                <label for="grade" class="control-label">Grade:</label>
+                <input type="text" class="form-control" name="grade" id="grade">
+              </div>
+              <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                  <button type="submit" class="btn btn-primary">Add</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+{% endblock %}
