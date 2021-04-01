@@ -7,7 +7,7 @@ from sqlalchemy import func
 import sqlite3
 
 app = Flask(__name__)
-app.config['SERVER_NAME'] = 'https://the-gpa-calculator-noay.herokuapp.com/'
+app.config['SERVER_NAME'] = 'the-gpa-calculator-noay.herokuapp.com'
 app.secret_key = 'Secret Key'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///sql/Course.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -104,4 +104,4 @@ def qua_point_calculate(grade, credit_hours):
 
 
 if __name__ == '__main__':
-    app.run(debug=True, host="https://the-gpa-calculator-noay.herokuapp.com/")
+    app.run(debug=True, host="the-gpa-calculator-noay.herokuapp.com")
