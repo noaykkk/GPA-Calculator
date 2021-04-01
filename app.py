@@ -104,4 +104,4 @@ def qua_point_calculate(grade, credit_hours):
 
 
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True, host="https://the-gpa-calculator-noay.herokuapp.com/")
