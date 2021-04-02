@@ -9,7 +9,7 @@ app = Flask(__name__)
 app.config['SERVER_NAME'] = 'the-gpa-calculator-noay.herokuapp.com'
 app.secret_key = 'Secret Key'
 SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URI')
-# app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///course.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///sql/course.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
