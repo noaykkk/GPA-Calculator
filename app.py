@@ -1,6 +1,5 @@
 from __future__ import division
-
-import json
+import os
 from flask import Flask, url_for, request, redirect, render_template
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import func
@@ -9,7 +8,8 @@ import sqlite3
 app = Flask(__name__)
 app.config['SERVER_NAME'] = 'the-gpa-calculator-noay.herokuapp.com'
 app.secret_key = 'Secret Key'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///sql/Course.db'
+SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URI')
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///course.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
