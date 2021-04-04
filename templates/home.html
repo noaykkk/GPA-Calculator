@@ -11,6 +11,41 @@ University GPA Calculator
           </div>
     </div>
 
+    <div class="card">
+        <a class="card-header">CURRENT GPA (OPTIONAL)<img src="/static/contract.svg" alt="Submit" class="rounded float-lg-right" onclick="sForm()"></a>
+        <div id="mForm" style="display:none">
+            <form action="{{ url_for('preset')}}" method="POST">
+                <div class="row">
+                    <div class="col-xs-6 col-sm-5">
+                        <div class="form-group">
+                            <label for="cGPA" class="col-xs-6 col-sm-5 control-label">Cumulative GPA</label>
+                            <div class="col-xs-6 col-sm-5">
+                                <input type="text" class="form-control" name="cGPA" id="cGPA">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-6 col-sm-5">
+                        <div class="form-group">
+                            <label for="cCredits" class="col-xs-6 col-sm-5 control-label">Credits</label>
+                            <div class="col-xs-6 col-sm-5">
+                                <input checked type="text" class="form-control" name="cCredits" id="cCredits" onchange="submit()">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <script>
+            function sForm(){
+                const x = document.getElementById("mForm");
+                if(x.style.display === 'none'){
+                    x.style.display = 'block';
+                } else{
+                    x.style.display = 'none';
+                }
+            }
+        </script>
+    </div>
     <!--table-->
     <div class="card">
         <h2 class="card-header"></h2>
@@ -46,8 +81,8 @@ University GPA Calculator
                   <div class="modal-dialog" role="document">
                     <div class="modal-content">
                       <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <h5 class="modal-title" id="exampleModalLabel">Update Course</h5>
+                          <h5 class="modal-title" id="exampleModalLabel">Update Course</h5>
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                       </div>
                       <div class="modal-body">
                         <form action="{{ url_for('update')}}" method="POST">
@@ -62,7 +97,24 @@ University GPA Calculator
                           </div>
                           <div class="form-group">
                             <label for="grade_update" class="control-label">Grade:</label>
-                            <input type="text" class="form-control" name="grade_update" id="grade_update" value="{{ row.grade }}">
+                              <span class="select-wrapper">
+                                  <select name="grade_update" id="grade_update">
+                                      <option selected="{{ row.grade }}">{{ row.grade }}</option>
+                                      <option value="A+">A+</option>
+                                      <option value="A">A</option>
+                                      <option value="A-">A-</option>
+                                      <option value="B+">B+</option>
+                                      <option value="B">B</option>
+                                      <option value="B-">B-</option>
+                                      <option value="C+">C+</option>
+                                      <option value="C">C</option>
+                                      <option value="C-">C-</option>
+                                      <option value="D+">D+</option>
+                                      <option value="D">D</option>
+                                      <option value="D-">D-</option>
+                                      <option value="F">F</option>
+                                  </select>
+                              </span>
                           </div>
                           <div class="modal-footer">
                               <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -102,8 +154,8 @@ University GPA Calculator
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h5 class="modal-title" id="exampleModalLabel">Course Information</h5>
+              <h5 class="modal-title" id="exampleModalLabel" >Course Information</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
           </div>
           <div class="modal-body">
             <form action="{{ url_for('insert')}}" method="POST">
@@ -117,7 +169,24 @@ University GPA Calculator
               </div>
               <div class="form-group">
                 <label for="grade" class="control-label">Grade:</label>
-                <input type="text" class="form-control" name="grade" id="grade">
+                  <span class="select-wrapper">
+                      <select name="grade" id="grade">
+                          <option value="" selected disabled hidden>Choose here</option>
+                          <option value="A+">A+</option>
+                          <option value="A">A</option>
+                          <option value="A-">A-</option>
+                          <option value="B+">B+</option>
+                          <option value="B">B</option>
+                          <option value="B-">B-</option>
+                          <option value="C+">C+</option>
+                          <option value="C">C</option>
+                          <option value="C-">C-</option>
+                          <option value="D+">D+</option>
+                          <option value="D">D</option>
+                          <option value="D-">D-</option>
+                          <option value="F">F</option>
+                      </select>
+                  </span>
               </div>
               <div class="modal-footer">
                   <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>

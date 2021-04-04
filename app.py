@@ -78,6 +78,21 @@ def update():
         return redirect(url_for('home'))
 
 
+@app.route('/preset/', methods=['GET', 'POST'])
+def preset():
+    if request.method == "POST":
+        course_id = "Cumulative GPA"
+        credit_hours = request.form['cCredits']
+        grade = request.form['cGPA']
+        quality_points = float(credit_hours) * float(grade)
+        insert_data = Course(course_id, credit_hours, grade, quality_points)
+        db.session.add(insert_data)
+        db.session.commit()
+        return redirect(url_for('home'))
+    else:
+        return redirect(url_for('home'))
+
+
 def calculator():
     total_hours = db.session.query(func.sum(Course.credit_hours)).scalar()
     points_counter = float(total_hours) * 4
@@ -89,14 +104,30 @@ def calculator():
 
 def qua_point_calculate(grade, credit_hours):
     quality_points = float
-    if grade == 'A':
+    if grade == 'A+':
         quality_points = float(credit_hours) * 4
+    elif grade == 'A':
+        quality_points = float(credit_hours) * 4
+    elif grade == 'A-':
+        quality_points = float(credit_hours) * 3.7
+    elif grade == 'B+':
+        quality_points = float(credit_hours) * 3.3
     elif grade == 'B':
         quality_points = float(credit_hours) * 3
+    elif grade == 'B-':
+        quality_points = float(credit_hours) * 2.7
+    elif grade == 'C+':
+        quality_points = float(credit_hours) * 2.3
     elif grade == 'C':
         quality_points = float(credit_hours) * 2
+    elif grade == 'C-':
+        quality_points = float(credit_hours) * 1.7
+    elif grade == 'D+':
+        quality_points = float(credit_hours) * 1.3
     elif grade == 'D':
         quality_points = float(credit_hours) * 1
+    elif grade == 'D-':
+        quality_points = float(credit_hours) * 0.7
     elif grade == 'F':
         quality_points = float(credit_hours) * 0
 
