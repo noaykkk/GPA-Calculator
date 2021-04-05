@@ -7,12 +7,12 @@ University GPA Calculator
 {% block body %}
     <div class="hello-image">
           <div class="hello-text">
-              <h1 style="font-size:100px">Major GPA Calculator</h1>
+              <h1 style="font-size:100px">GPA Calculator</h1>
           </div>
     </div>
 
     <div class="card">
-        <a class="card-header">CURRENT GPA (OPTIONAL)<img src="/static/contract.svg" alt="Submit" class="rounded float-lg-right" onclick="sForm()"></a>
+        <a class="card-header">CURRENT GPA (OPTIONAL)<img src="/static/semester-expand.svg" alt="Submit" class="rounded float-lg-right" onclick="sForm()"></a>
         <div id="mForm" style="display:none">
             <form action="{{ url_for('preset')}}" method="POST">
                 <div class="row">
