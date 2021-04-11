@@ -13,14 +13,14 @@ University GPA Calculator
 
     <div class="card">
         <a class="card-header">CURRENT GPA (OPTIONAL)<img src="/static/semester-expand.svg" alt="Submit" class="rounded float-lg-right" onclick="sForm()"></a>
-        <div id="mForm" style="display:none">
+        <div id="mForm" style="display:{% if Cum!=None %}block{% else %}none{% endif %}">
             <form action="{{ url_for('preset')}}" method="POST">
                 <div class="row">
                     <div class="col-xs-6 col-sm-5">
                         <div class="form-group">
                             <label for="cGPA" class="col-xs-6 col-sm-5 control-label">Cumulative GPA</label>
                             <div class="col-xs-6 col-sm-5">
-                                <input type="text" class="form-control" name="cGPA" id="cGPA">
+                                <input type="text" class="form-control" name="cGPA" id="cGPA" onfocus="this.value=''" value="{{ Cum.grade }}">
                             </div>
                         </div>
                     </div>
@@ -28,10 +28,14 @@ University GPA Calculator
                         <div class="form-group">
                             <label for="cCredits" class="col-xs-6 col-sm-5 control-label">Credits</label>
                             <div class="col-xs-6 col-sm-5">
-                                <input checked type="text" class="form-control" name="cCredits" id="cCredits" onchange="submit()">
+                                <input checked type="text" class="form-control" name="cCredits" id="cCredits" onfocus="this.value=''" value="{{ Cum.credit_hours }}" onchange="submit()">
                             </div>
                         </div>
                     </div>
+                    <a href="/delete/{{ Cum.id }}" type="button" class="btn btn-link" style="display:{% if Cum!=None %}block{% else %}none{% endif %}">Clear</a>
+                    {% if Cum!=None %}
+                        <input type="hidden" name="id" value="{{ Cum.id }}">
+                    {% endif %}
                 </div>
             </form>
         </div>
@@ -70,7 +74,7 @@ University GPA Calculator
                     <td>{{ row.course_id }}</td>
                     <td>{{ row.credit_hours }}</td>
                     <td>{{ row.grade }}</td>
-                    <td>{{ row.quality_points }}</td>
+                    <td>{{ "%.2f"|format(row.quality_points) }}</td>
                     <td>
                         <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#update{{ row.id }}">Edit</button>
                         <a href="/delete/{{ row.id }}" type="button" class="btn btn-danger">Delete</a>

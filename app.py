@@ -3,6 +3,7 @@ import os
 from flask import Flask, url_for, request, redirect, render_template
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import func
+import math
 import sqlite3
 
 app = Flask(__name__)
@@ -17,12 +18,14 @@ db = SQLAlchemy(app)
 
 class Course(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    label = db.Column(db.String(20))
     course_id = db.Column(db.String(20))
     credit_hours = db.Column(db.Float)
     grade = db.Column(db.String(3))
     quality_points = db.Column(db.Float)
 
-    def __init__(self, course_id, credit_hours, grade, quality_points):
+    def __init__(self, label, course_id, credit_hours, grade, quality_points):
+        self.label = label
         self.course_id = course_id
         self.credit_hours = credit_hours
         self.grade = grade
@@ -31,22 +34,29 @@ class Course(db.Model):
 
 @app.route('/')
 def home():
-    all_info = Course.query.all()
+    all_info = Course.query.filter_by(label='course')
+    # all_info = Course.query.all()
+    if bool(Course.query.filter_by(label='Preset').first()):
+        cum = Course.query.filter_by(label='Preset').one()
+    else:
+        cum = None
+
     if Course.query.first():
         gpa = calculator()
     else:
         gpa = -1
-    return render_template('home.html', Course=all_info, GPA=gpa)
+    return render_template('home.html', Course=all_info, GPA=gpa, Cum=cum)
 
 
 @app.route('/insert', methods=['POST'])
 def insert():
     if request.method == 'POST':
+        label = 'course'
         course_id = request.form['course_id']
         credit_hours = request.form['credit_hours']
         grade = request.form['grade']
         quality_points = qua_point_calculate(grade, credit_hours)
-        insert_data = Course(course_id, credit_hours, grade, quality_points)
+        insert_data = Course(label, course_id, credit_hours, grade, quality_points)
         db.session.add(insert_data)
         db.session.commit()
         return redirect(url_for('home'))
@@ -81,12 +91,23 @@ def update():
 @app.route('/preset/', methods=['GET', 'POST'])
 def preset():
     if request.method == "POST":
-        course_id = "Cumulative GPA"
-        credit_hours = request.form['cCredits']
-        grade = request.form['cGPA']
-        quality_points = float(credit_hours) * float(grade)
-        insert_data = Course(course_id, credit_hours, grade, quality_points)
-        db.session.add(insert_data)
+        if bool(Course.query.filter_by(label='Preset').first()):
+            update_id = request.form.get('id')
+            update_data = Course.query.get(update_id)
+            update_data.credit_hours = request.form['cCredits']
+            update_data.grade = request.form['cGPA']
+            update_data.quality_points = float(update_data.credit_hours) * float(update_data.grade)
+            update_data.quality_points = math.ceil(update_data.quality_points)
+        else:
+            label = 'Preset'
+            course_id = "Cumulative GPA"
+            credit_hours = request.form['cCredits']
+            grade = request.form['cGPA']
+            quality_points = float(credit_hours) * float(grade)
+            quality_points = math.ceil(quality_points)
+            insert_data = Course(label, course_id, credit_hours, grade, quality_points)
+            db.session.add(insert_data)
+
         db.session.commit()
         return redirect(url_for('home'))
     else:
@@ -98,7 +119,7 @@ def calculator():
     points_counter = float(total_hours) * 4
     total_qua_points = db.session.query(func.sum(Course.quality_points)).scalar()
     gpa = float(total_qua_points) / float(points_counter) * 4
-    gpa = float("{:.2f}".format(gpa))
+    gpa = math.floor(gpa * 100) / 100
     return gpa
 
 

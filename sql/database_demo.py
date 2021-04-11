@@ -4,13 +4,14 @@ conn = sqlite3.connect('course.db')
 
 c = conn.cursor()
 #
-# # c.execute("""CREATE TABLE Course (
-# #                  id integer primary key,
-# #                  course_id string(20),
-# #                  credit_hours float,
-# #                  grade string(3),
-# #                  quality_points float
-# #                   )""")
+# c.execute("""CREATE TABLE Course (
+#                  id integer primary key,
+#                  label string(20),
+#                  course_id string(20),
+#                  credit_hours float,
+#                  grade string(3),
+#                  quality_points float
+#                   )""")
 #
 # #c.execute("INSERT INTO Course VALUES(1,'ECE',3,'A',12)")
 #
